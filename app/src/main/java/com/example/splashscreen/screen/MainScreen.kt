@@ -1,63 +1,58 @@
 package com.example.splashscreen.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.LocalContentColor
+import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.splashscreen.BottomNav.BottomScreen
+import com.example.splashscreen.Utils.screens
 import com.example.splashscreen.navigation.BottomNavigationGraph
 import com.example.splashscreen.ui.theme.BOTTOM_BAR_BG
 import java.util.Locale
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
 
     val navController = rememberNavController()
+    val scaffoldState = rememberScaffoldState()
 
-    Scaffold(topBar = {
-        TopAppBar(backgroundColor = BOTTOM_BAR_BG) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(start = 10.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
+    Scaffold(
+        scaffoldState = scaffoldState,
+        drawerContent = {
+            NavigationDrawer()
+        },
+        topBar = {
+            TopAppBar(backgroundColor = BOTTOM_BAR_BG, title = {
                 Text(
                     text = "DEMO APP",
                     style = TextStyle(
@@ -66,11 +61,19 @@ fun MainScreen() {
                         fontSize = 16.sp
                     )
                 )
-            }
+            }, navigationIcon = {
+                IconButton(onClick = { }) {
+                    Icon(
+                        imageVector = Icons.Outlined.Menu,
+                        contentDescription = "Toggle Drawer",
+                        tint = Color.White
+                    )
+                }
+            })
+        }, bottomBar = {
+            BottomBar(navController)
         }
-    }, bottomBar = {
-        BottomBar(navController)
-    }) {
+    ) {
         BottomNavigationGraph(navController)
     }
 
@@ -78,12 +81,19 @@ fun MainScreen() {
 }
 
 @Composable
+fun NavigationDrawer() {
+    LazyColumn() {
+        items(screens) { item ->
+            Row() {
+                Text(text = item.title)
+            }
+        }
+    }
+}
+
+@Composable
 fun BottomBar(navController: NavHostController) {
-    val screens = listOf(
-        BottomScreen.HOME,
-        BottomScreen.Profile,
-        BottomScreen.Settings
-    )
+
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination

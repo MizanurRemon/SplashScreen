@@ -24,7 +24,7 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
         NavHost(
             navController = navController,
-            startDestination = Screens.SPLASH.name,
+            startDestination = Screens.MAIN.name,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.SPLASH.name) {
