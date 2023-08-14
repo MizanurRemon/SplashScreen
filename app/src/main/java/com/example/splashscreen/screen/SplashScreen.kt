@@ -18,7 +18,6 @@ import com.example.splashscreen.Utils.TypeWriterText
 import com.example.splashscreen.ui.theme.GRADIENT
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SplashScreen(navigateHome: () -> Unit) {
 

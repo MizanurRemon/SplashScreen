@@ -2,14 +2,20 @@ package com.example.splashscreen.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentColor
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -34,7 +41,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.splashscreen.BottomNav.BottomScreen
 import com.example.splashscreen.navigation.BottomNavigationGraph
 import com.example.splashscreen.ui.theme.BOTTOM_BAR_BG
-import com.example.splashscreen.ui.theme.PROFILE_BG
 import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -42,19 +48,30 @@ import java.util.Locale
 @Composable
 fun MainScreen() {
 
+    val navController = rememberNavController()
 
-    var selectedIndex = remember {
-        mutableStateOf(0)
-    }
-
-    var navController = rememberNavController()
-
-    Scaffold(bottomBar = {
+    Scaffold(topBar = {
+        TopAppBar(backgroundColor = BOTTOM_BAR_BG) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 10.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "DEMO APP",
+                    style = TextStyle(
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                )
+            }
+        }
+    }, bottomBar = {
         BottomBar(navController)
     }) {
         BottomNavigationGraph(navController)
-
-        // Text(text = "MAIn")
     }
 
 
@@ -93,9 +110,13 @@ fun BottomBar(navController: NavHostController) {
                 },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 icon = { Icon(imageVector = screen.icon, contentDescription = "") },
-                onClick = { navController.navigate(screen.route) },
+                onClick = {
+                    navController.navigate(screen.route) {
+                        popUpTo(navController.graph.id)
+                    }
+                },
                 selectedContentColor = Color.White,
-                unselectedContentColor = Color.Gray,
+                unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                 alwaysShowLabel = false
             )
         }
