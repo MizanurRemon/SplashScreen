@@ -16,14 +16,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.splashscreen.Utils.TypeWriterText
 import com.example.splashscreen.ui.theme.GRADIENT
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SplashScreen(navigateHome: () -> Unit) {
 
     LaunchedEffect(key1 = true) {
-        //delay(2000)
-        //navigateHome()
+        delay(2000)
+        navigateHome()
     }
 
     Column(

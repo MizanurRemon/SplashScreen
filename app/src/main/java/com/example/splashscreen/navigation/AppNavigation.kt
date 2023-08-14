@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.splashscreen.Route.Screens
 import com.example.splashscreen.screen.HomeScreen
+import com.example.splashscreen.screen.MainScreen
 import com.example.splashscreen.screen.SplashScreen
 
 
@@ -23,20 +24,20 @@ fun AppNavigation(navController: NavHostController = rememberNavController()) {
 
         NavHost(
             navController = navController,
-            startDestination = Screens.SPLASH.name,
+            startDestination = Screens.MAIN.name,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = Screens.SPLASH.name) {
                 SplashScreen(
                     navigateHome = {
-                        navController.navigate(Screens.HOME.name) {
+                        navController.navigate(Screens.MAIN.name) {
                             popUpTo(navController.graph.id)
                         }
                     })
             }
 
-            composable(route = Screens.HOME.name) {
-                HomeScreen()
+            composable(route = Screens.MAIN.name) {
+                MainScreen()
             }
 
 

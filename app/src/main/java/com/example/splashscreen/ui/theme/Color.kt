@@ -17,3 +17,9 @@ val GRADIENT = Brush.linearGradient(
         Color(0xFF673AB7),
     ),
 )
+
+val SETTINGS_BG = Color(0xFF374177)
+val HOME_BG = Color(0x77320D47)
+val PROFILE_BG = Color(0x9C191C33)
+
+val BOTTOM_BAR_BG = Color(0xFF141622)

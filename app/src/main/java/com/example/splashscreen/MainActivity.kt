@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.splashscreen.navigation.AppNavigation
+import com.example.splashscreen.screen.MainScreen
 import com.example.splashscreen.ui.theme.SplashScreenTheme
 
 class MainActivity : ComponentActivity() {
