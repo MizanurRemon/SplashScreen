@@ -1,10 +1,9 @@
 package com.example.splashscreen.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Row
+import android.widget.Toast
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -21,21 +20,26 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.splashscreen.Utils.screens
 import com.example.splashscreen.navigation.BottomNavigationGraph
+import com.example.splashscreen.navigation.NavigationDrawer
 import com.example.splashscreen.ui.theme.BOTTOM_BAR_BG
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
@@ -45,11 +49,29 @@ fun MainScreen() {
 
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     Scaffold(
         scaffoldState = scaffoldState,
         drawerContent = {
-            NavigationDrawer()
+            NavigationDrawer(currentDestination,onNavigationDrawerItemClick = {
+                scope.launch {
+                    //println("dataxx $it")
+                    scaffoldState.drawerState.close()
+
+                    navController.navigate(it) {
+                        popUpTo(navController.graph.id)
+                    }
+
+                }
+            }, onCloseClick = {
+                scope.launch {
+                    scaffoldState.drawerState.close()
+                }
+            })
         },
         topBar = {
             TopAppBar(backgroundColor = BOTTOM_BAR_BG, title = {
@@ -62,7 +84,12 @@ fun MainScreen() {
                     )
                 )
             }, navigationIcon = {
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.open()
+                    }
+
+                }) {
                     Icon(
                         imageVector = Icons.Outlined.Menu,
                         contentDescription = "Toggle Drawer",
@@ -71,7 +98,7 @@ fun MainScreen() {
                 }
             })
         }, bottomBar = {
-            BottomBar(navController)
+            BottomBar(navController , currentDestination)
         }
     ) {
         BottomNavigationGraph(navController)
@@ -80,29 +107,18 @@ fun MainScreen() {
 
 }
 
-@Composable
-fun NavigationDrawer() {
-    LazyColumn() {
-        items(screens) { item ->
-            Row() {
-                Text(text = item.title)
-            }
-        }
-    }
-}
 
 @Composable
-fun BottomBar(navController: NavHostController) {
+fun BottomBar(navController: NavHostController, currentDestination: NavDestination?) {
 
-
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val context = LocalContext.current
 
 
     BottomNavigation(
         backgroundColor = BOTTOM_BAR_BG, elevation = 15.dp, modifier = Modifier
             .padding(10.dp)
             .clip(RoundedCornerShape(20.dp))
+//            .height(60.dp)
 
     ) {
         screens.forEach { screen ->
@@ -119,16 +135,23 @@ fun BottomBar(navController: NavHostController) {
                     )
                 },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                icon = { Icon(imageVector = screen.icon, contentDescription = "") },
+                icon = {
+
+                    Icon(imageVector = screen.icon, contentDescription = "")
+
+                },
                 onClick = {
+
                     navController.navigate(screen.route) {
                         popUpTo(navController.graph.id)
                     }
+
                 },
                 selectedContentColor = Color.White,
                 unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
                 alwaysShowLabel = false
             )
+
         }
     }
 
