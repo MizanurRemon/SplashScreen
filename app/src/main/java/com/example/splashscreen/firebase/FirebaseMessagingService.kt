@@ -104,7 +104,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                         NotificationCompat.BigPictureStyle().bigPicture(resource)
                     )
                     val notification: Notification = builder.build()
-                    manager.notify(0, notification)
+                   // manager.notify(0, notification)
                 }
             })
         manager.notify(0, builder.build())
@@ -114,7 +114,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
-        //     Log.d("dataxx", "onNewToken: $token")
+            Log.d("dataxx", "onNewToken: $token")
 
     }
 }

@@ -5,9 +5,11 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import com.example.splashscreen.navigation.AppNavigation
 import com.example.splashscreen.screen.MainScreen
 import com.example.splashscreen.ui.theme.SplashScreenTheme
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : ComponentActivity() {
@@ -46,25 +49,42 @@ class MainActivity : ComponentActivity() {
 
                         Log.d("dataxx", "token::  $token")
 
-                    //    Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
+                        //    Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
 
                     })
 
-//                    if (ActivityCompat.checkSelfPermission(
-//                            this,
-//                            Manifest.permission.POST_NOTIFICATIONS
-//                        ) != PackageManager.PERMISSION_GRANTED
-//                    ) {
-//                        // TODO: Consider calling
-//                        //    ActivityCompat#requestPermissions
-//                        // here to request the missing permissions, and then overriding
-//                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//                        //                                          int[] grantResults)
-//                        // to handle the case where the user grants the permission. See the documentation
-//                        // for ActivityCompat#requestPermissions for more details.
-//                        return@Surface
-//                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
+                        if (ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+
+//                            Snackbar.make(
+//                                this,findViewById<View>(android.R.id.content).rootView,
+//                                "Please grant Notification permission from App Settings",
+//                                Snackbar.LENGTH_LONG
+//                            ).show()
+
+//                            lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
+//                            requestPermissionLauncher =
+//                                registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+//                                    if (!it) {
+//                                        requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+//
+//                                    }
+//                                }
+
+                            Toast.makeText(
+                                applicationContext,
+                                "give permission",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@Surface
+                        }
+
+                    }
 
 
                 }
