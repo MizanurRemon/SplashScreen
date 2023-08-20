@@ -78,4 +78,6 @@ dependencies {
 
     val navVersion = "2.5.3"
     implementation("androidx.navigation:navigation-compose:$navVersion")
+
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
 }
