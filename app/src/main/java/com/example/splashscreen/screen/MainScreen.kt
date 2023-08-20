@@ -59,7 +59,6 @@ fun MainScreen() {
         drawerContent = {
             NavigationDrawer(currentDestination,onNavigationDrawerItemClick = {
                 scope.launch {
-                    //println("dataxx $it")
                     scaffoldState.drawerState.close()
 
                     navController.navigate(it) {
