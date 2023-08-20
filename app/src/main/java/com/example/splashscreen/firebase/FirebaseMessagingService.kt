@@ -5,12 +5,15 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.splashscreen.MainActivity
 import com.example.splashscreen.R
+import com.example.splashscreen.Utils.Constants
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -27,7 +30,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         }
 
         message.data.let {
-            Log.d("dataxx", "onMessageReceived:body ${it["body"]}")
+            Log.d("dataxx", "onMessageReceived:body ${it[Constants.BODY]}")
             showNotificationOnStatusBar(it)
         }
 
@@ -45,8 +48,8 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         }
 
-        intent.putExtra("title", data["title"])
-        intent.putExtra("body", data["body"])
+        intent.putExtra(Constants.TITLE, data[Constants.TITLE])
+        intent.putExtra(Constants.BODY, data[Constants.BODY])
 
         val requestCode = System.currentTimeMillis().toInt()
 
@@ -63,19 +66,24 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         }
 
         val builder = NotificationCompat
-            .Builder(this, "Global")
+            .Builder(this, Constants.CHANNEL_ID)
             .setAutoCancel(true)
-            .setContentTitle(data["title"])
-            .setContentText(data["body"])
+            .setContentTitle(data[Constants.TITLE])
+            .setContentText(data[Constants.BODY])
             .setPriority(Notification.PRIORITY_HIGH)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(data["body"]))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(data[Constants.BODY]))
+            .setStyle(
+                NotificationCompat.BigPictureStyle()
+                    .bigPicture(BitmapFactory.decodeResource(this.resources, R.drawable.avatar))
+            )
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.drawable.baseline_back_hand_24)
+            .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.drawable.avatar))
 
         val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                "Global",
+                Constants.CHANNEL_ID,
                 "Default channel",
                 NotificationManager.IMPORTANCE_DEFAULT
             )
@@ -88,7 +96,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
-        Log.d("dataxx", "onNewToken: $token")
+        //     Log.d("dataxx", "onNewToken: $token")
 
         //  sendRegistrationToServer(token)
 
