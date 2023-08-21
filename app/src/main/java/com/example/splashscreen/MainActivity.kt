@@ -160,7 +160,7 @@ class MainActivity : ComponentActivity() {
             "timestamp" to FieldValue.serverTimestamp(),
         )
         // Get user ID from Firebase Auth or your own server
-        Firebase.firestore.collection("fcmTokens").document("myuserid")
+        Firebase.firestore.collection("fcmTokens").document(FieldValue.serverTimestamp().toString())
             .set(deviceToken).addOnSuccessListener {
                 Log.d("dataxx", "sendTokenToServer: $it")
             }
