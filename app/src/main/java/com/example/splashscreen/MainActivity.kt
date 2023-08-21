@@ -40,6 +40,9 @@ import com.example.splashscreen.screen.NotificationPermissionScreen
 import com.example.splashscreen.ui.theme.SplashScreenTheme
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -72,6 +75,8 @@ class MainActivity : ComponentActivity() {
                         Log.d("dataxx", "token::  $token")
 
                         //    Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
+
+                        sendTokenToServer(token);
 
                     })
 
@@ -145,6 +150,20 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun sendTokenToServer(token: String?) {
+
+        Log.d("dataxx", "onNewToken: $token")
+        val deviceToken = hashMapOf(
+            "token" to token,
+            "timestamp" to FieldValue.serverTimestamp(),
+        )
+        // Get user ID from Firebase Auth or your own server
+        Firebase.firestore.collection("fcmTokens").document("myuserid")
+            .set(deviceToken).addOnSuccessListener {
+                Log.d("dataxx", "sendTokenToServer: $it")
+            }
     }
 
 

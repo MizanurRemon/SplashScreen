@@ -19,6 +19,9 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.splashscreen.MainActivity
 import com.example.splashscreen.R
 import com.example.splashscreen.Utils.Constants
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -104,7 +107,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                         NotificationCompat.BigPictureStyle().bigPicture(resource)
                     )
                     val notification: Notification = builder.build()
-                   manager.notify(0, notification)
+                    manager.notify(0, notification)
                 }
             })
         manager.notify(0, builder.build())
@@ -113,8 +116,19 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
+        sendTokenToServer(token)
+    }
 
-            Log.d("dataxx", "onNewToken: $token")
-
+    private fun sendTokenToServer(token: String?) {
+        Log.d("dataxx", "onNewToken: $token")
+        val deviceToken = hashMapOf(
+            "token" to token,
+            "timestamp" to FieldValue.serverTimestamp(),
+        )
+        // Get user ID from Firebase Auth or your own server
+        Firebase.firestore.collection("fcmTokens").document("myuserid")
+            .set(deviceToken).addOnSuccessListener {
+                Log.d("dataxx", "sendTokenToServer: $it")
+            }
     }
 }
