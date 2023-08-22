@@ -1,8 +1,8 @@
 package com.example.splashscreen.Utils
 
 object Constants {
-    val BODY = "body"
-    val TITLE = "title"
-    val ICON = "icon"
-    val CHANNEL_ID = "Global"
+    const val BODY = "body"
+    const val TITLE = "title"
+    const val ICON = "icon"
+    const val CHANNEL_ID = "Global"
 }
