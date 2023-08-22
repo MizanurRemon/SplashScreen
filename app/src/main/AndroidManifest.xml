@@ -22,7 +22,7 @@
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.SplashScreen">
-            <intent-filter>
+            <intent-filter android:autoVerify="true" tools:targetApi="m">
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,8 +34,9 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:scheme="https" />
-                <data android:host="labtechnico.net" />
-<!--                <data android:pathPattern="/my-zoo-/" />-->
+                <data android:host="labtechnico.net"/>
+<!--                <data android:pathPrefix="/my-zoo-/"/>-->
+                <data android:pathPattern="/my-zoo-/" />
             </intent-filter>
         </activity>
 
