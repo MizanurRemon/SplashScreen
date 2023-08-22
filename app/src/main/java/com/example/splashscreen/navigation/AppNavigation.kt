@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import com.example.splashscreen.Route.Screens
 import com.example.splashscreen.screen.HomeScreen
 import com.example.splashscreen.screen.MainScreen

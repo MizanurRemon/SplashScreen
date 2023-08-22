@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navDeepLink
 import com.example.splashscreen.BottomNav.BottomScreen
 import com.example.splashscreen.screen.HomeScreen
 import com.example.splashscreen.screen.ProfileScreen
@@ -20,7 +21,7 @@ fun BottomNavigationGraph(navController: NavHostController ) {
             HomeScreen()
         }
 
-        composable(route = BottomScreen.Profile.route) {
+        composable(route = BottomScreen.Profile.route, deepLinks = listOf(navDeepLink { uriPattern = "https://labtechnico.net/my-zoo-/" })) {
             ProfileScreen()
         }
 

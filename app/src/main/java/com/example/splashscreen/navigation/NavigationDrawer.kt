@@ -115,16 +115,17 @@ fun NavigationDrawer(
                         .clickable {
                             onNavigationDrawerItemClick(item.title)
                         }
-                        .border(
-                            width = .5.dp,
-                            color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) DRAWER_SELECTED_BORDER else Color.White,
-                            shape = RoundedCornerShape(10.dp))
+//                        .border(
+//                            width = .5.dp,
+//                            color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) DRAWER_SELECTED_BORDER else Color.White
+//                        )
                         .background(
-                          //  shape = RoundedCornerShape(10.dp),
-                            color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) DRAWER_SELECTED else Color.White)
+                            shape = RoundedCornerShape(10.dp),
+                            color = if (currentDestination?.hierarchy?.any { it.route == item.route } == true) DRAWER_SELECTED else Color.White
+                        )
                 ) {
                     Text(
-                        text = item.title, modifier = Modifier.padding(10.dp)
+                        text = item.title, modifier = Modifier.padding(15.dp), style = TextStyle(color = Color.Black)
                     )
                 }
             }
