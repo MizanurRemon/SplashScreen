@@ -69,10 +69,6 @@ class MainActivity : ComponentActivity() {
                         }
                         val token = task.result
 
-                        Log.d("dataxx", "token::  $token")
-
-                        //    Toast.makeText(this, token, Toast.LENGTH_SHORT).show()
-
                         sendTokenToServer(token);
 
                     })
@@ -154,10 +150,12 @@ class MainActivity : ComponentActivity() {
         Log.d("dataxx", "onNewToken: $token")
         val deviceToken = hashMapOf(
             "token" to token,
-            "timestamp" to FieldValue.serverTimestamp(),
+            "model" to Build.MODEL.toString(),
+            "device" to Build.DEVICE.toString(),
+            "manufacturer" to Build.MANUFACTURER
         )
         // Get user ID from Firebase Auth or your own server
-        Firebase.firestore.collection("fcmTokens").document(FieldValue.serverTimestamp().toString())
+        Firebase.firestore.collection("tokensDB").document(token.toString())
             .set(deviceToken).addOnSuccessListener {
                 Log.d("dataxx", "sendTokenToServer: $it")
             }
