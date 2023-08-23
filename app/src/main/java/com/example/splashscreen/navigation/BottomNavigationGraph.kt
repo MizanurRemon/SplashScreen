@@ -1,5 +1,6 @@
 package com.example.splashscreen.navigation
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -12,7 +13,7 @@ import com.example.splashscreen.screen.ProfileScreen
 import com.example.splashscreen.screen.SettingsScreen
 
 @Composable
-fun BottomNavigationGraph(navController: NavHostController ) {
+fun BottomNavigationGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = BottomScreen.HOME.route
@@ -21,7 +22,13 @@ fun BottomNavigationGraph(navController: NavHostController ) {
             HomeScreen()
         }
 
-        composable(route = BottomScreen.Profile.route, deepLinks = listOf(navDeepLink { uriPattern = "https://labtechnico.net/my-zoo-/" })) {
+        composable(
+            route = BottomScreen.Profile.route,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "https://labtechnico.net/my-zoo-/"
+                action = Intent.ACTION_VIEW
+            })
+        ) {
             ProfileScreen()
         }
 
