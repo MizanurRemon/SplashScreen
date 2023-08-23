@@ -143,75 +143,11 @@ class MainActivity : ComponentActivity() {
 
                     }
 
-
-                  //  getDeepLinksPermission()
-
-//                    if (ActivityCompat.checkSelfPermission(
-//                            this,
-//                            Manifest.permission.LAUNCH_MULTI_PANE_SETTINGS_DEEP_LINK
-//                        ) != PackageManager.PERMISSION_GRANTED
-//                    ){
-//                        Log.d("dataxx", "getDeepLinksPermission: 1")
-//                    }else{
-//                        Log.d("dataxx", "getDeepLinksPermission: 2")
-//                    }
-
-
                 }
             }
         }
     }
 
-
-    @Composable
-    private fun getDeepLinksPermission() {
-        val context = applicationContext
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            // Check the result of the installation attempt
-            val resultCode = result.resultCode
-            // Handle the result as needed
-        }
-
-//        val installIntent = Intent(Intent.ACTION_VIEW).apply {
-//            setDataAndType(apkUri, "application/vnd.android.package-archive")
-//            flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-//        }
-
-        // You can also prompt the user to enable installations from unknown sources
-        val unknownSourcesIntent = Intent(Settings.ACTION_SETTINGS_EMBED_DEEP_LINK_ACTIVITY).apply {
-            data = Uri.parse("package:${context.packageName}")
-        }
-
-        // Launch the installation or settings activity based on user's choice
-//        val installOrSettingsIntent = Intent.createChooser(
-//            installIntent,
-//            "Install Package"
-//        )
-
-        Button(onClick = {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // On Android Oreo and above, check if installation from unknown sources is allowed
-                if (!context.packageManager.canRequestPackageInstalls()) {
-                    // Launch the settings activity to enable installation from unknown sources
-                   launcher.launch(unknownSourcesIntent)
-
-                    Log.d("dataxx", "getDeepLinksPermission: 1")
-                } else {
-                    // Launch the installation activity
-                //    launcher.launch(installOrSettingsIntent)
-                    Log.d("dataxx", "getDeepLinksPermission: 2")
-                }
-            } else {
-                // On older versions, launch the installation activity directly
-            //    launcher.launch(installOrSettingsIntent)
-                Log.d("dataxx", "getDeepLinksPermission: 3")
-            }
-        }) {
-            Text("Install Package")
-        }
-    }
 
     private fun sendTokenToServer(token: String?) {
 
