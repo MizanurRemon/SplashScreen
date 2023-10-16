@@ -35,6 +35,8 @@ import androidx.core.app.ActivityCompat
 import com.example.splashscreen.navigation.AppNavigation
 import com.example.splashscreen.ui.theme.SplashScreenTheme
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -42,13 +44,19 @@ import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : ComponentActivity() {
-
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
+/*
+         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        val bundle = Bundle()
+        bundle.putString(FirebaseAnalytics.Param.METHOD, "testing")
+        firebaseAnalytics.logEvent("screen", null)*/
+
+
         setContent {
-
-
 
             val openNotificationDialog = remember {
                 mutableStateOf(true)

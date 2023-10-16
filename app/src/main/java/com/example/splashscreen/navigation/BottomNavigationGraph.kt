@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navDeepLink
 import com.example.splashscreen.BottomNav.BottomScreen
+import com.example.splashscreen.firebase.trackNavigationEvents
 import com.example.splashscreen.screen.HomeScreen
 import com.example.splashscreen.screen.ProfileScreen
 import com.example.splashscreen.screen.SettingsScreen
@@ -35,5 +36,7 @@ fun BottomNavigationGraph(navController: NavHostController) {
         composable(route = BottomScreen.Settings.route) {
             SettingsScreen()
         }
+
+        trackNavigationEvents(navController)
     }
 }

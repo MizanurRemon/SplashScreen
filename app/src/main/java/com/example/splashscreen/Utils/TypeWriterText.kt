@@ -25,7 +25,7 @@ fun TypeWriterText(texts: String, fontSize: TextUnit, fontWeight: FontWeight, co
             textToDisplay += texts[textInd]
             delay(200)
 
-            Log.d("dataxx", "TypeWriterText: ${textToDisplay.toString()}")
+         //   Log.d("dataxx", "TypeWriterText: ${textToDisplay.toString()}")
         }
     }
 
