@@ -2,21 +2,17 @@ package com.example.splashscreen
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
+import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
+import android.telephony.TelephonyManager
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -37,23 +33,25 @@ import com.example.splashscreen.ui.theme.SplashScreenTheme
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import java.text.SimpleDateFormat
+import java.util.Calendar
 
 
 class MainActivity : ComponentActivity() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     @SuppressLint("CoroutineCreationDuringComposition")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
-/*
-         firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.METHOD, "testing")
-        firebaseAnalytics.logEvent("screen", null)*/
+        /*
+                 firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.METHOD, "testing")
+                firebaseAnalytics.logEvent("screen", null)*/
 
 
         setContent {
@@ -77,9 +75,11 @@ class MainActivity : ComponentActivity() {
                         }
                         val token = task.result
 
-                        sendTokenToServer(token);
+                        sendTokenToServer(token)
 
-                    })
+                    }).addOnFailureListener {
+                        Log.d("errorxx", "onCreate: ${it.toString()}")
+                    }
 
 
 
@@ -153,19 +153,30 @@ class MainActivity : ComponentActivity() {
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     private fun sendTokenToServer(token: String?) {
 
-        Log.d("dataxx", "onNewToken: $token")
+        val mTelephonyMgr = getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        val number = HashMap<String, String>()
+        number["simCountryIso"] = mTelephonyMgr.simCountryIso
+        number["simOperator"] = mTelephonyMgr.simOperator
+        number["simOperatorName"] = mTelephonyMgr.simOperatorName
+        number["simState"] = mTelephonyMgr.simState.toString()
+        number["getSimCountryIso"] = mTelephonyMgr.simCountryIso
+
+
         val deviceToken = hashMapOf(
             "token" to token,
             "model" to Build.MODEL.toString(),
             "device" to Build.DEVICE.toString(),
-            "manufacturer" to Build.MANUFACTURER
+            "manufacturer" to Build.MANUFACTURER,
+            "timestamp" to SimpleDateFormat("yyyy-MM-dd HH:mma").format(Calendar.getInstance().time),
+            //"phone" to number
         )
         // Get user ID from Firebase Auth or your own server
         Firebase.firestore.collection("tokensDB").document(token.toString())
             .set(deviceToken).addOnSuccessListener {
-                Log.d("dataxx", "sendTokenToServer: $it")
+                Log.d("tagxx", "sendTokenToServer: $it")
             }
     }
 
